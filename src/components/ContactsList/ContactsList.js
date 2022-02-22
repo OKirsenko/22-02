@@ -3,10 +3,13 @@ import s from './ContactList.module.css';
 import { connect } from 'react-redux';
 import { removeContact } from '../../redux/contacts/contactsActions';
 
-function ContactsList({ contacts, removeContact }) {
+function ContactsList({ contacts, removeContact, filter }) {
+  const filteredContacts = contacts.filter(contact =>
+    contact.name.toLowerCase().includes(filter.toLowerCase())
+  );
   return (
     <ul className={s.list}>
-      {contacts.map(({ id, name, number }) => (
+      {filteredContacts.map(({ id, name, number }) => (
         <li className={s.item} key={id}>
           {name} : {number}
           <button className={s.button} onClick={() => removeContact(id)}>
@@ -23,7 +26,8 @@ ContactsList.propTypes = {
 };
 
 const mapStatetoProps = state => ({
-  contacts: state.contacts,
+  contacts: state.contacts.items,
+  filter: state.contacts.filter,
 });
 
 const mapDispatchToProps = {

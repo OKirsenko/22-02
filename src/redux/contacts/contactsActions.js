@@ -10,3 +10,8 @@ export const removeContact = id => {
     payload: id,
   };
 };
+
+export const filterContact = value => ({
+  type: 'contacts/filter',
+  payload: value,
+});
