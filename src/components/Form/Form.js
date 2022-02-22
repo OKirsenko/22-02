@@ -1,12 +1,14 @@
 import { nanoid } from 'nanoid';
 import { useState } from 'react';
 import s from './Form.module.css';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { addContact } from 'redux/contacts/contactsActions';
 
-function Form({ addContactProp }) {
+function Form() {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+
+  const dispatch = useDispatch();
 
   const handleChange = e => {
     const { name, value } = e.currentTarget;
@@ -30,8 +32,7 @@ function Form({ addContactProp }) {
       number,
       id: nanoid(),
     };
-    // onSubmit(contact);
-    addContactProp(contact);
+    dispatch(addContact(contact));
     reset();
   };
 
@@ -77,8 +78,4 @@ function Form({ addContactProp }) {
   );
 }
 
-const mapDispatchToProps = {
-  addContactProp: addContact,
-};
-
-export default connect(null, mapDispatchToProps)(Form);
+export default Form;
