@@ -1,57 +1,57 @@
-import { useState } from 'react';
-import FeedbackOptions from './FeedbackOptions/FeedbackOptions';
-import Notification from './Notification/Notitfication';
-import Section from './Section/Section';
-import Statistics from './Statistics/Statistics';
+import { useState, useEffect } from 'react';
+import ContactsList from './ContactsList/ContactsList';
+import Filter from './Filter/Filter';
+import Form from './Form/Form';
 
 export default function App() {
-  const [good, setGood] = useState(0);
-  const [neutral, setNeutral] = useState(0);
-  const [bad, setBad] = useState(0);
+  const contactsArr = [
+    { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+    { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+    { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+    { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+  ];
+  // const contactsStorage = JSON.parse(localStorage.getItem('contacts'));
+  // const [contacts, setContacts] = useState(
+  //   () => contactsStorage || contactsArr
+  // );
+  const [filter, setFilter] = useState('');
 
-  const options = ['good', 'neutral', 'bad'];
-  const total = good + neutral + bad;
-  const positivePercentage = Math.round((good * 100) / total);
+  // useEffect(() => {
+  //   localStorage.setItem('contacts', JSON.stringify(contacts));
+  // }, [contacts]);
+  // const formSubmit = contact => {
+  //   if (
+  //     contacts.find(
+  //       item => item.name.toLowerCase() === contact.name.toLowerCase()
+  //     )
+  //   ) {
+  //     return alert(`${contact.name} is already in contacts`);
+  //   }
 
-  function onClick(e) {
-    const { name } = e.target;
+  //   setContacts(prev => [...prev, contact]);
+  // };
 
-    switch (name) {
-      case 'good':
-        setGood(good + 1);
-        break;
+  const handleChange = e => {
+    const { value } = e.target;
 
-      case 'neutral':
-        setNeutral(neutral + 1);
-        break;
+    setFilter(value);
+  };
 
-      case 'bad':
-        setBad(bad + 1);
-        break;
-
-      default:
-        return;
-    }
-  }
+  const filterContact = () => {
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(filter.toLowerCase())
+    );
+  };
+  // const removeContact = id =>
+  //   setContacts(prev => prev.filter(item => item.id !== id));
 
   return (
     <div>
-      <Section title={'Please leave feedback'}>
-        <FeedbackOptions options={options} onClick={onClick} />
-      </Section>
-      <Section title={'Statistics'}>
-        {total > 0 ? (
-          <Statistics
-            good={good}
-            bad={bad}
-            neutral={neutral}
-            total={total}
-            positivePercentage={positivePercentage}
-          />
-        ) : (
-          <Notification message={'There is no feedback'} />
-        )}
-      </Section>
+      <h1>Phonebook</h1>
+      <Form />
+      <h2>Contacts</h2>
+      <Filter filter={filter} handleChange={handleChange} />
+      <ContactsList />
     </div>
   );
 }
